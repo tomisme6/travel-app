@@ -9,8 +9,8 @@ from expense_algo import minimize_debts
 # ==========================================
 # 1. 資料庫設定 (雲端 Supabase)
 # ==========================================
-# ⚠️ 注意：請把 [你的密碼] 替換成你註冊時設定的真實密碼（不要保留中括號）
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres.dyckcsvjlpsepyriiwqz:0214iris19780922@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres"
+# 走 5432 直達正門的網址 (請將 [你的密碼] 替換成你剛剛寫的密碼，並刪除中括號)
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:0214iris19780922@db.dyckcsvjlpsepyriiwqz.supabase.co:5432/postgres"
 
 # PostgreSQL 引擎不需要 check_same_thread 參數
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
