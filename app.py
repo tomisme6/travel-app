@@ -3,7 +3,7 @@ import requests
 from datetime import datetime, timedelta
 import streamlit.components.v1 as components
 
-API_URL = "http://127.0.0.1:8000"
+API_URL = "https://tom-travel-app.onrender.com"
 TIME_OPTIONS = [f"{h:02d}:{m:02d}" for h in range(24) for m in (0, 30)]
 
 st.set_page_config(page_title="旅遊小幫手 App", page_icon="✈️", layout="centered")
