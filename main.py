@@ -7,13 +7,13 @@ import json
 from expense_algo import minimize_debts
 
 # ==========================================
-# 1. 資料庫設定 (雲端 Supabase)
+# 1. 資料庫設定 (雲端 Supabase - 終極穩定版)
 # ==========================================
-# 走 5432 直達正門的網址 (請將 [你的密碼] 替換成你剛剛寫的密碼，並刪除中括號)
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:0214iris19780922@db.dyckcsvjlpsepyriiwqz.supabase.co:5432/postgres"
+# 換回 6543 閘道，支援 Render 的 IPv4 網路環境
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres.dyckcsvjlpsepyriiwqz:0214iris19780922@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres"
 
-# PostgreSQL 引擎不需要 check_same_thread 參數
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+# 加入 pool_pre_ping=True 確保雲端連線穩定不斷線
+engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -35,7 +35,7 @@ class DBExpense(Base):
     payer = Column(String)
     shared_by = Column(String)
 
-class DBMember(Base): # ✨ 新增：成員資料表
+class DBMember(Base): 
     __tablename__ = "members"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True)
@@ -62,7 +62,7 @@ class ExpenseCreate(BaseModel):
     payer: str         
     shared_by: List[str]
 
-class MemberCreate(BaseModel): # ✨ 新增：成員接收格式
+class MemberCreate(BaseModel):
     name: str
 
 app = FastAPI()
@@ -74,7 +74,7 @@ def get_db():
 
 # --- 3. API 路由 ---
 
-# 【成員管理 API】 ✨ 全新功能
+# 【成員管理 API】 
 @app.get("/members/")
 def get_members(db: Session = Depends(get_db)):
     return db.query(DBMember).all()
@@ -99,7 +99,7 @@ def delete_member(member_id: int, db: Session = Depends(get_db)):
         return {"status": "success"}
     raise HTTPException(status_code=404)
 
-# 【行程管理 API】 (保持不變)
+# 【行程管理 API】 
 @app.get("/settings/")
 def get_settings(db: Session = Depends(get_db)):
     settings = db.query(DBSetting).all()
@@ -147,7 +147,7 @@ def update_itinerary(item_id: int, item: ItineraryCreate, db: Session = Depends(
         return {"status": "success"}
     raise HTTPException(status_code=404)
 
-# 【記帳與結算 API】 (保持不變)
+# 【記帳與結算 API】 
 @app.post("/expenses/")
 def add_expense(item: ExpenseCreate, db: Session = Depends(get_db)):
     db_item = DBExpense(item_name=item.item_name, amount=item.amount, payer=item.payer, shared_by=json.dumps(item.shared_by))
