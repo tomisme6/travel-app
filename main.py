@@ -10,7 +10,7 @@ from expense_algo import minimize_debts
 # 1. 資料庫設定 (雲端 Supabase - 終極穩定版)
 # ==========================================
 # 換回 6543 閘道，支援 Render 的 IPv4 網路環境
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres.dyckcsvjlpsepyriiwqz:0214iris19780922@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres.dyckcsvjlpsepyriiwqz:0214iris19780922@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres"
 
 # 加入 pool_pre_ping=True 確保雲端連線穩定不斷線
 engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
